@@ -42,10 +42,17 @@ public class MsgReceiver extends Service {
         /*throw new UnsupportedOperationException("Not yet implemented");*/
         return null;
     }
+    @Override
+    public void onDestroy()
+    {
+        Log.d("msgS", "ServiceStopped");
+        Intent I=new Intent(getApplicationContext(),MsgReceiver.class);
+        startService(I);
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("msg", "ServiceStarted");
+        Log.d("msgS", "ServiceStarted");
         sharedPreferences = getSharedPreferences("ChatPrefs", MODE_PRIVATE);
         sharedPreferences2 = getSharedPreferences("UserPrefs", MODE_PRIVATE);
 
