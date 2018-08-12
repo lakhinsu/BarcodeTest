@@ -3,6 +3,7 @@ package com.example.lak.barcodetest;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -52,20 +53,42 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setTitle("MqttChat");
+
        /* ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (!(MsgReceiver.class.equals(service.service.getClassName()))) {
                 Log.i ("isMyServiceRunning?", true+"");*/
+       if(MsgReceiver.instance==false){
                 Intent Service=new Intent(this,MsgReceiver.class);
-
                 startService(Service);
+       }
+
+       displayChats();
 
        /*     }
         }*/
 
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
-        textView=(TextView) findViewById(R.id.ContentDisp);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void displayChats(){
         Chats=(ListView) findViewById(R.id.Chats);
 
         List<String> values = new ArrayList<>();
@@ -73,8 +96,6 @@ public class MainActivity extends AppCompatActivity
         List<String> pass=new ArrayList<>();
 
         sharedpreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-
-        textView.setText(sharedpreferences.getAll().toString());
 
 
         Map<String, ?> allEntries = sharedpreferences.getAll();
@@ -98,25 +119,8 @@ public class MainActivity extends AppCompatActivity
 
                                          }
                                      }
-                );
+        );
 
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -162,9 +166,6 @@ public class MainActivity extends AppCompatActivity
             intent.setAction("com.google.zxing.client.android.SCAN");
             intent.putExtra("SAVE_HISTORY", false);
             startActivityForResult(intent, 13);
-
-
-
         }
         else if (id == R.id.Register) {
 
@@ -198,6 +199,7 @@ public class MainActivity extends AppCompatActivity
                 editor.putString(s[0],s[1]);
                 editor.commit();
                 System.out.println(sharedpreferences.getAll());
+                displayChats();
             } else if (resultCode == RESULT_CANCELED) {
                 System.out.println("Failed");
             }

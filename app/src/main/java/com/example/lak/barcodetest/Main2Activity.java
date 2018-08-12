@@ -44,7 +44,7 @@ public class Main2Activity extends AppCompatActivity {
 
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
             try {
-                BitMatrix bitMatrix = multiFormatWriter.encode(s3, BarcodeFormat.QR_CODE,barcode.getWidth(),barcode.getHeight());
+                BitMatrix bitMatrix = multiFormatWriter.encode(s3, BarcodeFormat.QR_CODE,900 ,900);
                 BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                 Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
                 barcode.setImageBitmap(bitmap);

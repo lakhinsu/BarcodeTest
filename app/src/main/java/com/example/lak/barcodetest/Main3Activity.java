@@ -21,6 +21,13 @@ public class Main3Activity extends CaptureActivity {
 
         barcodeScannerView = initializeContent();
 
+        try{
+            wait(2000);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
         capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.decode();
@@ -67,6 +74,7 @@ public class Main3Activity extends CaptureActivity {
 
     @Override
     public void onBackPressed(){
-        this.finish();
+
+        this.onDestroy();
     }
 }
